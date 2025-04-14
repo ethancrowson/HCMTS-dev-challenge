@@ -1,13 +1,11 @@
 package com.ecrowson.hmctsdevchallenge.model;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 
+@Entity
 public class Task {
     @Id
     @GeneratedValue
