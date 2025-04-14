@@ -2,6 +2,7 @@ package com.ecrowson.hmctsdevchallenge.service;
 
 import com.ecrowson.hmctsdevchallenge.model.Status;
 import com.ecrowson.hmctsdevchallenge.model.Task;
+import com.ecrowson.hmctsdevchallenge.repository.TaskRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,10 +10,18 @@ import java.util.List;
 @Service
 public class TaskServiceImpl implements TaskService {
 
+    private final TaskRepo Repo;
+
+    public TaskServiceImpl(TaskRepo Repo) {
+        this.Repo = Repo;
+    }
 
     @Override
     public Task createTask(Task Task) {
-        return null;
+        if (Task.getStatus() == null) {
+            Task.setStatus(com.ecrowson.hmctsdevchallenge.model.Status.PENDING);
+        }
+        return Repo.save(Task);
     }
 
     @Override
