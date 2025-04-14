@@ -11,42 +11,42 @@ import java.util.List;
 @Service
 public class TaskServiceImpl implements TaskService {
 
-    private final TaskRepo Repo;
+    private final TaskRepo repo;
 
-    public TaskServiceImpl(TaskRepo Repo) {
-        this.Repo = Repo;
+    public TaskServiceImpl(TaskRepo repo) {
+        this.repo = repo;
     }
 
     @Override
-    public Task createTask(Task Task) {
-        if (Task.getStatus() == null) {
-            Task.setStatus(com.ecrowson.hmctsdevchallenge.model.Status.PENDING);
+    public Task createTask(Task task) {
+        if (task.getStatus() == null) {
+            task.setStatus(com.ecrowson.hmctsdevchallenge.model.Status.PENDING);
         }
-        return Repo.save(Task);
+        return repo.save(task);
     }
 
     @Override
-    public Task getTaskById(Long Id) {
-        return Repo.findById(Id).orElseThrow(() -> new EntityNotFoundException("Cannot find task with id: " + Id));
+    public Task getTaskById(Long id) {
+        return repo.findById(id).orElseThrow(() -> new EntityNotFoundException("Cannot find task with id: " + id));
     }
 
     @Override
     public List<Task> getAllTasks() {
-        return Repo.findAll();
+        return repo.findAll();
     }
 
     @Override
-    public Task updateTaskStatus(Long id, Status Status) {
-        Task Task = getTaskById(id);
-        Task.setStatus(Status);
-        return Repo.save(Task);
+    public Task updateTaskStatus(Long id, Status status) {
+        Task task = getTaskById(id);
+        task.setStatus(status);
+        return repo.save(task);
     }
 
     @Override
-    public void deleteTaskById(Long Id) {
-        if (!Repo.existsById(Id)) {
-            throw new EntityNotFoundException("Cannot find task with id: " + Id);
+    public void deleteTaskById(Long id) {
+        if (!repo.existsById(id)) {
+            throw new EntityNotFoundException("Cannot find task with id: " + id);
         }
-        Repo.deleteById(Id);
+        repo.deleteById(id);
     }
 }
