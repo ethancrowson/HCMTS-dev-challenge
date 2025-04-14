@@ -27,7 +27,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getTaskById(Long Id) {
-        return Repo.findById(Id).orElseThrow(() -> new EntityNotFoundException("Cannot find taks with id: " + Id));
+        return Repo.findById(Id).orElseThrow(() -> new EntityNotFoundException("Cannot find task with id: " + Id));
     }
 
     @Override
@@ -44,6 +44,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteTaskById(Long Id) {
-
+        if (!Repo.existsById(Id)) {
+            throw new EntityNotFoundException("Cannot find task with id: " + Id);
+        }
+        Repo.deleteById(Id);
     }
 }
