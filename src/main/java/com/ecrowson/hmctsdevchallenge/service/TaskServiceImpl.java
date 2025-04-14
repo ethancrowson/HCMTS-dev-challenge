@@ -37,7 +37,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task updateTaskStatus(Long id, Status Status) {
-        return null;
+        Task Task = getTaskById(id);
+        Task.setStatus(Status);
+        return Repo.save(Task);
     }
 
     @Override
