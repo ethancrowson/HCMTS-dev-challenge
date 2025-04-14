@@ -3,6 +3,7 @@ package com.ecrowson.hmctsdevchallenge.service;
 import com.ecrowson.hmctsdevchallenge.model.Status;
 import com.ecrowson.hmctsdevchallenge.model.Task;
 import com.ecrowson.hmctsdevchallenge.repository.TaskRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getTaskById(Long Id) {
-        return null;
+        return Repo.findById(Id).orElseThrow(() -> new EntityNotFoundException("Cannot find taks with id: " + Id));
     }
 
     @Override
