@@ -4,6 +4,7 @@ import com.ecrowson.hmctsdevchallenge.controller.TaskController;
 import com.ecrowson.hmctsdevchallenge.model.Status;
 import com.ecrowson.hmctsdevchallenge.model.Task;
 import com.ecrowson.hmctsdevchallenge.service.TaskService;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -49,5 +51,15 @@ class TaskControllerTest {
         Task result = taskController.getTaskById(1L).getBody();
 
         assertEquals(task.getTitle(), result.getTitle());
+    }
+    @Test
+    void testGetTaskById_NotFound() {
+        when(taskService.getTaskById(1L)).thenThrow(new EntityNotFoundException("Task not found"));
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            taskController.getTaskById(1L);
+        });
+
+        assertEquals("Task not found", exception.getMessage());
     }
 }
