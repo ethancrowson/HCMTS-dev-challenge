@@ -6,9 +6,11 @@ import com.ecrowson.hmctsdevchallenge.repository.TaskRepo;
 import com.ecrowson.hmctsdevchallenge.service.TaskServiceImpl;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,16 +19,14 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class TaskServiceImplTest {
 
-    private TaskServiceImpl taskService;
+    @Mock
     private TaskRepo taskRepo;
 
-    @BeforeEach
-    public void setUp() {
-        taskRepo = Mockito.mock(TaskRepo.class);
-        taskService = new TaskServiceImpl(taskRepo);
-    }
+    @InjectMocks
+    private TaskServiceImpl taskService;
 
     @Test
     void testCreateTask_DefaultStatusPending() {
@@ -90,5 +90,19 @@ public class TaskServiceImplTest {
 
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> taskService.deleteTaskById(1L));
         assertEquals("Cannot find task with id: 1", exception.getMessage());
+    }
+    @Test
+    void testUpdateTaskStatus_Found() {
+        Task task = new Task();
+        task.setId(1L);
+        task.setTitle("Test Task");
+        task.setStatus(Status.PENDING);
+
+        when(taskRepo.findById(1L)).thenReturn(Optional.of(task));
+        when(taskRepo.save(any(Task.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Task updatedTask = taskService.updateTaskStatus(1L, Status.COMPLETED);
+        assertEquals(Status.COMPLETED, updatedTask.getStatus());
+        verify(taskRepo, times(1)).save(task);
     }
 }

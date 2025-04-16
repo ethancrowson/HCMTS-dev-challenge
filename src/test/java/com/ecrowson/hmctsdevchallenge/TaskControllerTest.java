@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -61,5 +62,15 @@ class TaskControllerTest {
         });
 
         assertEquals("Task not found", exception.getMessage());
+    }
+    @Test
+    void testUpdateTaskStatus_Found() {
+        task.setStatus(Status.COMPLETED);
+
+        when(taskService.updateTaskStatus(1L, Status.COMPLETED)).thenReturn(task);
+
+        ResponseEntity<Task> result = taskController.updateTaskStatus(1L, Status.COMPLETED);
+
+        assertEquals(Status.COMPLETED, result.getBody().getStatus());
     }
 }
