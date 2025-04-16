@@ -76,4 +76,12 @@ public class TaskServiceImplTest {
         assertEquals(2, result.size());
         verify(taskRepo, times(1)).findAll();
     }
+    @Test
+    void testDeleteTaskById_Found() {
+        when(taskRepo.existsById(1L)).thenReturn(true);
+
+        taskService.deleteTaskById(1L);
+
+        verify(taskRepo, times(1)).deleteById(1L);
+    }
 }
