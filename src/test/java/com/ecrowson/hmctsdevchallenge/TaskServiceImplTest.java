@@ -9,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -40,5 +42,18 @@ public class TaskServiceImplTest {
         assertEquals(Status.PENDING, result.getStatus());
         assertEquals("New Task", result.getTitle());
         verify(taskRepo, times(1)).save(task);
+    }
+    @Test
+    void testGetTaskById_Found() {
+        Task task = new Task();
+        task.setId(1L);
+        task.setTitle("Sample Task");
+
+        when(taskRepo.findById(1L)).thenReturn(Optional.of(task));
+
+        Task result = taskService.getTaskById(1L);
+
+        assertEquals(1L, result.getId());
+        assertEquals("Sample Task", result.getTitle());
     }
 }
