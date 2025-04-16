@@ -42,4 +42,12 @@ class TaskControllerTest {
 
         assertEquals(task.getTitle(), result.getTitle());
     }
+    @Test
+    void testGetTaskById_Found() {
+        when(taskService.getTaskById(1L)).thenReturn(task);
+
+        Task result = taskController.getTaskById(1L).getBody();
+
+        assertEquals(task.getTitle(), result.getTitle());
+    }
 }
