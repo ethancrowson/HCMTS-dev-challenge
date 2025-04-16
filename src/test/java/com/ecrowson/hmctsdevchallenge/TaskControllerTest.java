@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -81,5 +83,14 @@ class TaskControllerTest {
         taskController.deleteTask(1L);
 
         verify(taskService, times(1)).deleteTaskById(1L);
+    }
+    @Test
+    void testGetAllTasks() {
+        when(taskService.getAllTasks()).thenReturn(List.of(task));
+
+        List<Task> result = taskController.getAllTasks();
+
+        assertEquals(1, result.size());
+        assertEquals(task.getTitle(), result.get(0).getTitle());
     }
 }
