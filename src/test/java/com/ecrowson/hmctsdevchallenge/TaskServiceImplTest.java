@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,5 +65,15 @@ public class TaskServiceImplTest {
 
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> taskService.getTaskById(1L));
         assertEquals("Cannot find task with id: 1", exception.getMessage());
+    }
+    @Test
+    void testGetAllTasks() {
+        List<Task> tasks = Arrays.asList(new Task(), new Task());
+        when(taskRepo.findAll()).thenReturn(tasks);
+
+        List<Task> result = taskService.getAllTasks();
+
+        assertEquals(2, result.size());
+        verify(taskRepo, times(1)).findAll();
     }
 }
