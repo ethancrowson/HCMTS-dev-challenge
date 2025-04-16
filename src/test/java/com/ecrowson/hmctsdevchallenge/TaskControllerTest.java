@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TaskControllerTest {
@@ -72,5 +72,14 @@ class TaskControllerTest {
         ResponseEntity<Task> result = taskController.updateTaskStatus(1L, Status.COMPLETED);
 
         assertEquals(Status.COMPLETED, result.getBody().getStatus());
+        verify(taskService, times(1)).updateTaskStatus(1L, Status.COMPLETED);
+    }
+    @Test
+    void testDeleteTask() {
+        doNothing().when(taskService).deleteTaskById(1L);
+
+        taskController.deleteTask(1L);
+
+        verify(taskService, times(1)).deleteTaskById(1L);
     }
 }
