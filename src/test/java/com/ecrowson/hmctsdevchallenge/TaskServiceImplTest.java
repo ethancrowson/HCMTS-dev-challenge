@@ -84,4 +84,11 @@ public class TaskServiceImplTest {
 
         verify(taskRepo, times(1)).deleteById(1L);
     }
+    @Test
+    void testDeleteTaskById_NotFound() {
+        when(taskRepo.existsById(1L)).thenReturn(false);
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> taskService.deleteTaskById(1L));
+        assertEquals("Cannot find task with id: 1", exception.getMessage());
+    }
 }
