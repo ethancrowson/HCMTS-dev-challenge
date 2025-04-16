@@ -1,11 +1,45 @@
 package com.ecrowson.hmctsdevchallenge;
 
+import com.ecrowson.hmctsdevchallenge.controller.TaskController;
+import com.ecrowson.hmctsdevchallenge.model.Status;
+import com.ecrowson.hmctsdevchallenge.model.Task;
+import com.ecrowson.hmctsdevchallenge.service.TaskService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-public class TaskControllerTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class TaskControllerTest {
+
+    @Mock
+    private TaskService taskService;
+
+    @InjectMocks
+    private TaskController taskController;
+
+    private Task task;
+
+    @BeforeEach
+    void setUp() {
+        task = new Task();
+        task.setId(1L);
+        task.setTitle("Test Task");
+        task.setStatus(Status.PENDING);
+    }
 
     @Test
-    public void testTaskController() {
+    void testCreateTask() {
+        when(taskService.createTask(any(Task.class))).thenReturn(task);
 
+        Task result = taskController.createTask(task);
+
+        assertEquals(task.getTitle(), result.getTitle());
     }
 }
