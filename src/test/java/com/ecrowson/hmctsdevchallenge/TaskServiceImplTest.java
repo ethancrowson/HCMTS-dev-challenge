@@ -5,6 +5,7 @@ import com.ecrowson.hmctsdevchallenge.model.Task;
 import com.ecrowson.hmctsdevchallenge.repository.TaskRepo;
 import com.ecrowson.hmctsdevchallenge.service.TaskServiceImpl;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -55,5 +56,12 @@ public class TaskServiceImplTest {
 
         assertEquals(1L, result.getId());
         assertEquals("Sample Task", result.getTitle());
+    }
+    @Test
+    void testGetTaskById_NotFound() {
+        when(taskRepo.findById(1L)).thenReturn(Optional.empty());
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> taskService.getTaskById(1L));
+        assertEquals("Cannot find task with id: 1", exception.getMessage());
     }
 }
